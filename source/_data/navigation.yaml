@@ -1,33 +1,97 @@
-{
-  "logo": {
-    "text": "Appetizer文档",
-    "type": "link",
-    "path": "index.html"
-  },
-  "main": [
-    {
-      "text": "REST API",
-      "type": "link",
-      "path": "rest.html"
-    },
-    {
-      "text": "SUPPORT AND FEEDBACK",
-      "type": "label"
-    },
-    {
-      "text": "Github Organization",
-      "type": "link",
-      "path": "https://github.com/appetizerio"
-    },
-    {
-      "text": "QQ群：467889502",
-      "type": "link",
-      "path": "http://shang.qq.com/wpa/qunwpa?idkey=4f1ef873aac8ca2a545fae99067ef5f4e505ac4a6ee3d1fad937a5dfe43ae274"
-    },
-    {
-      "text": "社区",
-      "type": "link",
-      "path": "https://testerhome.com/topics/node127"
-    },
-  ]
-}
+logo:
+  text: Appetizer文档
+  type: link
+  path: index.html
+main:
+- text: 快速入门
+  type: link
+  path: get-started.html
+
+- text: 功能与使用
+  type: label
+- text: 录制重放
+  type: link
+  path: usage/replay.html
+- text: 插桩
+  type: link
+  path: usage/instrumentation.html
+- text: 测试
+  type: link
+  path: usage/testing.html
+- text: 分析
+  type: link
+  path: usage/analysis.html
+- text: 理解报告
+  type: link
+  path: usage/understand-report.html
+- text: 接入第三方服务
+  type: link
+  path: usage/3rdparty.html
+
+- text: 高级话题
+  type: label
+- text: 插桩原理
+  type: link
+  path: advanced/under-the-hood-instrumentation.html
+- text: 分析原理
+  type: link
+  path: advanced/under-the-hood-analysis.html
+- text: 混淆加固
+  type: link
+  path: advanced/obfuscation.html
+- text: 网络流量优化
+  type: link
+  path: advanced/traffic.html
+- text: 私有化部署
+  type: link
+  path: advanced/private-deployment.html
+
+- text: 开放API与持续化集成
+  type: label
+- text: 环境配置
+  type: link
+  path: https://testerhome.com/topics/10290
+- text: 录制重放
+  type: link
+  path: integration/replaykit-intro.html
+  children:
+    - text: 命令行工具
+      type: link
+      path: integration/replaykit.html
+    - text: Python 封装
+      type: link
+      path: integration/replaykit.py.html
+    - text: Java 封装
+      type: link
+      path: integration/replaykit.java.html
+- text: 插桩分析
+  type: link
+  path: integration/insights.html
+  children:
+    - text: 命令行工具(Python)
+      type: link
+      path: integration/insights.py.html
+    - text: Jenkins接入
+      type: link
+      path: integration/insights.jenkins.html
+- text: REST API
+  type: link
+  path: integration/rest.html
+
+- text: 社区
+  type: label
+- text: 贡献文档
+  type: link
+  path: https://github.com/appetizerio/docs
+- text: Github 组织
+  type: link
+  path: https://github.com/appetizerio
+- text: QQ群 467889502
+  type: link
+  path: http://shang.qq.com/wpa/qunwpa?idkey=4f1ef873aac8ca2a545fae99067ef5f4e505ac4a6ee3d1fad937a5dfe43ae274
+- text: Testerhome专栏
+  type: link
+  path: https://testerhome.com/topics/node127
+- text: 知乎专栏
+  type: link
+  path: https://zhuanlan.zhihu.com/smartmobdev
