@@ -1,0 +1,33 @@
+{
+  "logo": {
+    "text": "Appetizer文档",
+    "type": "link",
+    "path": "index.html"
+  },
+  "main": [
+    {
+      "text": "REST API",
+      "type": "link",
+      "path": "rest.html"
+    },
+    {
+      "text": "SUPPORT AND FEEDBACK",
+      "type": "label"
+    },
+    {
+      "text": "Github Organization",
+      "type": "link",
+      "path": "https://github.com/appetizerio"
+    },
+    {
+      "text": "QQ群：467889502",
+      "type": "link",
+      "path": "http://shang.qq.com/wpa/qunwpa?idkey=4f1ef873aac8ca2a545fae99067ef5f4e505ac4a6ee3d1fad937a5dfe43ae274"
+    },
+    {
+      "text": "社区",
+      "type": "link",
+      "path": "https://testerhome.com/topics/node127"
+    },
+  ]
+}

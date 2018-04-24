@@ -1,0 +1,266 @@
+swagger: "2.0"
+info:
+  description: "AppetizerIO provides APK instrumentation and data collection capabilities to analyze app performance and defects."
+  version: "2.0.0"
+  title: "Appetizer API"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+host: "api.appetizer.io"
+basePath: "/v2"
+tags:
+- name: "analysis"
+  description: "An analysis report is generated from app's execution log and contains app defects and performance issues"
+- name: "instrumentation"
+  description: "A method to automatically modify APK binary to add  transparent logging functionality"
+- name: "user"
+  description: "A user signed up with AppetizerIO"
+schemes:
+- "https"
+paths:
+  /oauth/check_token:
+    get:
+      tags:
+      - "user"
+      summary: "Check if an oauth token is valid"
+      description: ""
+      operationId: "checkToken"
+      responses:
+        200:
+          description: "OAuth is good"
+        401:
+          description: "OAuth is not valid"
+      security:
+      - login: []
+  /oauth/access_token:
+    get:
+      tags:
+      - "user"
+      summary: "Login with a user account and obtain the oauth token"
+      description: ""
+      operationId: "login"
+      consumes:
+      - "application/x-www-form-urlencoded"
+      parameters:
+      - name: "username"
+        in: "formData"
+        description: "Appetizer user name"
+        required: true
+        type: "string"
+      - name: "password"
+        in: "formData"
+        description: "Appetizer user password"
+        required: true
+        type: "string"
+      - name: "grant_type"
+        in: "formData"
+        description: "Appetizer oauth grant type"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "login successful, oauth token returned"
+        400:
+          description: "login failed, for whatever reasons"
+  /profile:
+    get:
+      tags:
+      - "user"
+      summary: "Returns user level, quota and usage"
+      description: ""
+      operationId: "getUserInfo"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "successful operation"
+        401:
+          description: "auth failed"
+  /insight/process/qiniu:
+    post:
+      tags:
+      - "instrumentation"
+      summary: "Upload an APK for instrumentation"
+      description: ""
+      operationId: "instrumentApp"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/UploadToken"
+        401:
+          description: "Not oauth-ed"
+      security:
+      - login: []
+  /insight/process:
+    get:
+      tags:
+      - "instrumentation"
+      summary: "Check instrumentation progress"
+      description: ""
+      operationId: "checkInstrumentationProgress"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "key"
+        in: "query"
+        description: "The key found in the UploadToken"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/InstrumentationProgress"
+        401:
+          description: "Not oauth-ed"
+      security:
+      - login: []
+  /insight/analyze/qiniu:
+    post:
+      tags:
+      - "analysis"
+      summary: "Upload execution logs for analysis"
+      description: ""
+      operationId: "analyzeExecution"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/UploadToken"
+        401:
+          description: "Not oauth-ed"
+      security:
+      - login: []
+      deprecated: true
+  /insight/analyze/direct/{rewriteID}:
+    post:
+      tags:
+      - "analysis"
+      summary: "Upload execution logs for analysis"
+      description: ""
+      parameters:
+      - name: "rewriteID"
+        in: "path"
+        description: "A pre-generated rewriteID per instrumented APK"
+        required: true
+        type: "string"
+      operationId: "analyzeExecutionDirect"
+      produces:
+      - "text/plain"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/UploadToken"
+        400:
+          description: "rewriteID is not valid"
+        401:
+          description: "Not oauth-ed"
+      security:
+      - login: []
+  /insight/analyze:
+    get:
+      tags:
+      - "analysis"
+      summary: "Check analysis progress"
+      description: ""
+      operationId: "checkAnalysisProgress"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "key"
+        in: "query"
+        description: "The key found in the UploadToken"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/AnalysisProgress"
+        401:
+          description: "Not oauth-ed"
+      security:
+      - login: []
+  /insight/process/query:
+    get:
+      tags:
+      - "instrumentation"
+      summary: "Returns a list of instrumented APKs"
+      description: ""
+      operationId: "checkMyAPKs"
+      produces:
+      - "application/json"
+      parameters: 
+      - name: "range"
+        in: "query"
+        description: "The query range, being all or recent"
+        required: false
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "object"
+            additionalProperties:
+              type: "integer"
+              format: "int32"
+      security:
+      - login: []
+  /insight/analyze/query:
+    get:
+      tags:
+      - "analysis"
+      summary: "Returns a list of analysis reports"
+      description: ""
+      operationId: "checkMyReports"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "range"
+        in: "query"
+        description: "The query range, being all or recent"
+        required: false
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "object"
+            additionalProperties:
+              type: "integer"
+              format: "int32"
+      security:
+      - login: []
+securityDefinitions:
+  login:
+    type: "apiKey"
+    in: "header"
+    name: "Bearer"
+definitions:
+  UploadToken:
+    type: "object"
+    properties:
+      key:
+        type: "string"
+      token:
+        type: "string"
+  InstrumentationProgress:
+    type: "object"
+    properties:
+      state:
+        type: "string"
+      downloadURL:
+        type: "string"
+  AnalysisProgress:
+    type: "object"
+    properties:
+      state:
+        type: "string"
+      downloadURL:
+        type: "string"
