@@ -9,9 +9,6 @@ main:
 
 - text: 功能与使用
   type: label
-- text: 录制重放
-  type: link
-  path: usage/replay.html
 - text: 插桩
   type: link
   path: usage/instrumentation.html
@@ -21,12 +18,24 @@ main:
 - text: 分析
   type: link
   path: usage/analysis.html
-- text: 理解报告
-  type: link
-  path: usage/understand-report.html
 - text: 接入第三方服务
   type: link
   path: usage/3rdparty.html
+- text: 历史版本
+  type: link
+  path: changelog.html
+
+- text: 教程
+  type: label
+- text: 精细化 HTTP 分析 (一)：别再只是代理抓个包了
+  type: link
+  path: http://zhuanlan.zhihu.com/p/27734223
+- text: 精细化 HTTP 分析 (二)：响应性能分析与优化
+  type: link
+  path: http://zhuanlan.zhihu.com/p/27733454
+- text: Kotlin时代测试工具的选择
+  type: link
+  path: http://zhuanlan.zhihu.com/p/27149213
 
 - text: 高级话题
   type: label
