@@ -48,6 +48,9 @@ main:
 - text: 混淆加固
   type: link
   path: advanced/obfuscation.html
+- text: 接口测试
+  type: link
+  path: advanced/api-testing.html
 - text: 网络流量优化
   type: link
   path: advanced/traffic.html
