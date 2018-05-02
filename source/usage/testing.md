@@ -29,22 +29,34 @@ title: 测试
   * [Appetizer 整合梳理](https://testerhome.com/topics/10290)
 
 ## UI压力测试Maxim
-[Maxim](https://github.com/zhangzhao4444/Maxim) 是一个基于uiautomator的快速UI界面压力测试工具，可以全自动解析界面控件树，并按照一定遍历规则进行点击、滑动、输入等操作；可通过Appetizer 主导航->APP测试->UI压力测试来使用
+[Maxim](https://github.com/zhangzhao4444/Maxim) 是一个基于uiautomator的快速UI界面压力测试工具，可以全自动解析界面控件树，并按照一定遍历规则进行点击、滑动、输入等操作；可通过Appetizer 主导航->APP测试->UI压力测试来使用；
 ![](https://testerhome.com/uploads/photo/2018/8028ddbc-38c2-427b-8864-336e9316ed52.gif!large)
 * 优点：稳定可靠(Android 5-7)，速度快，全自动，可配置
 * 缺点：对复杂业务（需要特殊输入的不合适），APP需要配置跳过难以自动化的部分，例如登录、表单等
 
+Appetizer简化了配置 Maxim 命令行的工作； Appetizer 提供了以下便利：
+* 自动产生命令行固定部分，不再需要检查打字打错
+* 图形化支持所有 Maxim 参数，选择特定模式显示配置仅该模式支持的子参数；保证参数配置正确，方便好用
+* 在图形化界面中直接编辑各种配置文件，不再需要手工push到设备配置名字，开始测试时 Appetizer 自动产生配置文件并push（见下图）
+* 非常方便的黑白名单界面，轻松点击指定黑白Activity不再需要记忆长长的Activity全名
+* 快捷批量操作，批量下载截图，批量删除；问题一键上报作者
 ![](maxim-overview.png)
 
 |  一应俱全的Maxim配置  | 黑白名单 | 问题上报作者，下载结果 | 
 |:-----------------:| :---------------: | :--: |
 |  ![](maxim-config.png) |![](maxim-whitelist.png)| ![](maxim-download-results.png)|
 
-## UI遍历测试AppCrawler
+## UI遍历测试 AppCrawler
 [AppCrawler](https://testerhome.com/topics/8343)是一个基于Appium的自动化遍历工具，可以全自动解析界面控件树，通过配置进行遍历以及比较复杂的交互方案，适用Android/iOS；可通过Appetizer 主导航->APP测试->UI自动遍历来使用
 ![](https://testerhome.com/uploads/photo/2017/25cdb6a8-d6cb-4891-b0ff-5ccd7c3005c8.png!large)
 * 优点：可用于Android/iOS，设计合理的遍历规则的情况下可以达到比较好的自动化效果
 * 缺点：继承了Appium的所有Bug，偶尔不稳定，交互速度慢等；
+
+Appetizer简化了配置 AppCrawler 的工作； Appetizer 提供了以下便利：
+* 所见即所得YML配置文件编辑器，不用跑就知道配置格式对不对
+* 图形化支持所有 AppCrawler 参数
+* 配置文件自动产生，自动更新，保证每次都是最新版本，不用特别指定路径
+
 ```
 ----------------
 AppCrawler 2.0.0

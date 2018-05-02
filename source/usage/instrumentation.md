@@ -29,5 +29,7 @@ title: 插桩
   * APP加固 -> 请插桩 debug 或者 release包，不能加固，详见 [混淆与加固](advanced/obfuscation.html)
   * APP已经插桩 -> 请插桩一个未插桩的APK，已插桩即可使用
 * 插桩后启动闪退
-  * 确认是否有签名检查机制，对插桩包进行重新签名后再试，详见 [混淆与加固](advanced/obfuscation.html)
+  * 确认是否有签名检查机制，使用主导航 APK文件工具，打开插桩包，对插桩包进行重新签名，使用调试Key重新签名，如下图，重新签名后再试
+![](resign.png)
+![](resign2.png)
   * 请查看 [插桩原理](advanced/under-the-hood-instrumentation.html)是否有相关情况，问题未解决 -> 请上报

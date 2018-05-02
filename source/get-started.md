@@ -45,7 +45,6 @@ C:\Users\Administrator\AppData\Local\Android\sdk\platform-tools
 ![](get-started-sample-report.png)
 
 ## 继续阅读
-* [使用录制重放工具简化重复劳动](replay.html)
 * [选择合理的测试方法 提高测试覆盖面 让Appetizer找到更多问题](testing.html)
 * [理解Appetizer报告找到的问题 导出报告进一步分析](analysis.html)
 * [接入更多的第三方服务 从报告开始构建完整质量保障体系](3rdparty.html)
