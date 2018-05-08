@@ -12,6 +12,21 @@ title: 插桩
 * 插桩APK，正常安装、授权，启动后如图，可以在设备上完成上传分析
 ![](floating-menu.png)
 
+## ADB控制
+插桩后的 APK 会响应特定的 Broadcast 命令，可以由其他 APP 通过 `sendBroadcast(Intent intent)` 的方式，或者 `adb shell am broadcast -a <ACTION>` 的方式控制插桩包的测试过程，方便集成。以下以 `adb am`为例子：
+* `adb shell am broadcast -a io.appetizer.agent.HelloAppetizer`：插桩包会在 Logcat 中输出以 APPETIZER （全大写）为tag的消息 `hello from <pkg>`，其中 `<pkg>` 是插桩包的包名，表示插桩包能够正常响应 broadcast 命令
+* `adb shell am broadcast -a io.appetizer.agent.FloatingMenu`：打开或者关闭浮动框功能，不带参数默认为打开，`--es enabled <true/false>` 指定打开或者关闭
+* `adb shell am broadcast -a io.appetizer.agent.StartTest`：等同于浮动框的开始测试
+* `adb shell am broadcast -a io.appetizer.agent.FinishTest`：等同于浮动框的完成测试
+* `adb shell am broadcast -a io.appetizer.agent.UploadForAnalysis`：等同于浮动框的上传分析
+* `adb shell am broadcast -a io.appetizer.agent.Log ...`：增加任意自定义Log信息，extras参数会被自动转化成 JSON 记录到 log，例如：`adb shell am broadcast -a io.appetizer.agent.Log --ez myBool true --es haha dada --ei myint 10` 会产生 `{"myBool": true, "haha": "dada", "myint": 10}`的json被记录
+* `adb shell am broadcast -a io.appetizer.agent.DumpJacoco`：当收集Jacoco的功能被打开，并且APP已经正常接入了 jacoco 覆盖率库时，该功能将获取当前的 jacoco exec数据，保存到 log，并根据插桩配置中的 `jacoco.resetOnDump` 决定是否清空 exec 数据
+
+**注意： broadcast 命令要求插桩包进程正常运行于后台，即APP可以处于前台Activity状态，或者后台Service状态，但APP的进程一定要存在，如果进程不存在，插桩APP不会自动被 broadcast 拉起，命令将无效**
+
+### 多个运行插桩包同时运行的情况
+当设备上有多个插桩包同时运行时，每个插桩包都会响应同名的 broadcast 命令，如果需要精确只控制某个APP，可以将 `adb shell am broadcast -a io.appetizer.agent.HelloAppetizer` 改成 `adb shell am broadcast -a io.appetizer.agent.HelloAppetizer <pkg>`，这样 broadcast 只会通知指定的 pkg。注意，当 broadcast 有附加参数时 `<pkg>` 需要在命令最后，例如：`adb shell am broadcast -a io.appetizer.agent.Log --ez myBool true --es haha dada --ei myint 10 com.example.myapp`
+
 ## APP权限要求
 | 网络权限(声明即获取) | 外存读写权限(声明) | 外存权限(获取) | 可否插桩 | log位置 | 浮动框上传分析 | PC端上传分析 |
 | :---: | :---: | :---: | :---: | --- | :---: | :---: |
