@@ -56,6 +56,9 @@ Appetizer log的信息包括：url，请求参数（http request header），返
 ## 插桩会与其他数据收集SDK冲突么
 * Appetizer 秉承公平竞争的原则，在检测到有类似功能的 SDK 需要收集类似功能时（例如通过 Okhttp interceptor 或者 uncaughtExceptionHandler）会传递相关信息，保证兼容
 
+## 插桩后APK包会增大多少
+* Appetizer 增加的部分是插入的DEX代码，约为170KB；另外重新签名和重新打包过程中会减小APK的大小，两项总和的情况下APK大小可能反减不增。另外在multidex的情况下，Appetizer增加的DEX可能会安排在次classes.dex里，不会增加APP创建进程的时间（冷启动时间）
+
 ## 安全性
 Jadx反编译             |  Smali diff
 :-------------------------:|:-------------------------:
