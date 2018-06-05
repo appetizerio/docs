@@ -18,20 +18,6 @@ tags:
 schemes:
 - "https"
 paths:
-  /oauth/check_token:
-    get:
-      tags:
-      - "user"
-      summary: "Check if an oauth token is valid"
-      description: ""
-      operationId: "checkToken"
-      responses:
-        200:
-          description: "OAuth is good"
-        401:
-          description: "OAuth is not valid"
-      security:
-      - login: []
   /oauth/access_token:
     get:
       tags:
@@ -42,6 +28,11 @@ paths:
       consumes:
       - "application/x-www-form-urlencoded"
       parameters:
+      - name: Authorization
+        in: header
+        description: Appetizer CONSTANT! Basic YXBwZXRpemVyX2NsaWVudDppbnRlcm5hbA==
+        required: true
+        type: string
       - name: "username"
         in: "formData"
         description: "Appetizer user name"
@@ -57,23 +48,67 @@ paths:
         description: "Appetizer oauth grant type"
         required: true
         type: "string"
+        x-example: "password"
       responses:
         200:
           description: "login successful, oauth token returned"
         400:
           description: "login failed, for whatever reasons"
+  /oauth/check_token:
+    get:
+      tags:
+      - "user"
+      summary: "Check if an oauth token is valid"
+      description: ""
+      parameters:
+      - name: Authorization
+        in: header
+        description: OAUTH2 token
+        required: true
+        type: string
+      operationId: "checkToken"
+      responses:
+        200:
+          description: OK
+          examples:
+            application/json:
+              success: true
+        401:
+          description: "OAuth is not valid"
   /profile:
     get:
       tags:
       - "user"
       summary: "Returns user level, quota and usage"
       description: ""
+      parameters:
+      - name: Authorization
+        in: header
+        description: OAUTH2 token
+        required: true
+        type: string
       operationId: "getUserInfo"
       produces:
       - "application/json"
       responses:
         200:
           description: "successful operation"
+          examples:
+            application/json:
+              "user_level": 9
+              "quota":
+                  "apps_quota": 3000
+                  "process_quota_per_month": 10000
+                  "analyze_quota_per_month": 30000
+                  "insight_query_all": true
+              "usage":
+                  "instrumentation": 1
+                  "analysis": 0
+              "apps":
+                - io.appetizer.example1
+                - io.appetizer.example2
+                - io.appetizer.example3
+              "email": "contact@appetizer.io"
         401:
           description: "auth failed"
   /insight/process/qiniu:
@@ -82,6 +117,12 @@ paths:
       - "instrumentation"
       summary: "Upload an APK for instrumentation"
       description: ""
+      parameters:
+      - name: Authorization
+        in: header
+        description: OAUTH2 token
+        required: true
+        type: string
       operationId: "instrumentApp"
       produces:
       - "application/json"
@@ -92,38 +133,18 @@ paths:
             $ref: "#/definitions/UploadToken"
         401:
           description: "Not oauth-ed"
-      security:
-      - login: []
-  /insight/process:
-    get:
-      tags:
-      - "instrumentation"
-      summary: "Check instrumentation progress"
-      description: ""
-      operationId: "checkInstrumentationProgress"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "key"
-        in: "query"
-        description: "The key found in the UploadToken"
-        required: true
-        type: "string"
-      responses:
-        200:
-          description: "successful operation"
-          schema:
-            $ref: "#/definitions/InstrumentationProgress"
-        401:
-          description: "Not oauth-ed"
-      security:
-      - login: []
   /insight/analyze/qiniu:
     post:
       tags:
       - "analysis"
       summary: "Upload execution logs for analysis"
       description: ""
+      parameters:
+      - name: Authorization
+        in: header
+        description: OAUTH2 token
+        required: true
+        type: string
       operationId: "analyzeExecution"
       produces:
       - "application/json"
@@ -134,8 +155,6 @@ paths:
             $ref: "#/definitions/UploadToken"
         401:
           description: "Not oauth-ed"
-      security:
-      - login: []
       deprecated: true
   /insight/analyze/direct/{rewriteID}:
     post:
@@ -161,87 +180,98 @@ paths:
           description: "rewriteID is not valid"
         401:
           description: "Not oauth-ed"
-      security:
-      - login: []
-  /insight/analyze:
-    get:
-      tags:
-      - "analysis"
-      summary: "Check analysis progress"
-      description: ""
-      operationId: "checkAnalysisProgress"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "key"
-        in: "query"
-        description: "The key found in the UploadToken"
-        required: true
-        type: "string"
-      responses:
-        200:
-          description: "successful operation"
-          schema:
-            $ref: "#/definitions/AnalysisProgress"
-        401:
-          description: "Not oauth-ed"
-      security:
-      - login: []
   /insight/process/query:
     get:
       tags:
       - "instrumentation"
-      summary: "Returns a list of instrumented APKs"
+      summary: "Returns the status of one or more APK instrumentation tasks"
       description: ""
       operationId: "checkMyAPKs"
       produces:
       - "application/json"
       parameters: 
+      - name: Authorization
+        in: header
+        description: OAUTH2 token
+        required: true
+        type: string
       - name: "range"
         in: "query"
         description: "The query range, being all or recent"
+        required: false
+        type: "string"
+        x-example: "all"
+      - name: "key"
+        in: "query"
+        description: "The task id"
         required: false
         type: "string"
       responses:
         200:
           description: "successful operation"
           schema:
-            type: "object"
-            additionalProperties:
-              type: "integer"
-              format: "int32"
-      security:
-      - login: []
+            $ref: "#/definitions/InstrumentationTasks"
+          examples:
+            application/json:
+              success: true
+              result:
+                - "appetizercfg": "{}"
+                  "createTime": "2018-04-20T06:54:54.787Z"
+                  "state": "rewrite_fail"
+                  "filesize": 27675803
+                  "originalName": "app-Alpha-debug (2).apk"
+                  "message": "{\"rewriteID\":\"\",\"err\":\"the app does not have READ/WRITE external storage permission\",\"success\":false,\"warnings\":[]}"
+                  "id": 1
   /insight/analyze/query:
     get:
       tags:
       - "analysis"
-      summary: "Returns a list of analysis reports"
+      summary: "Returns the status of one or more analysis tasks"
       description: ""
       operationId: "checkMyReports"
       produces:
       - "application/json"
       parameters:
+      - name: Authorization
+        in: header
+        description: OAUTH2 token
+        required: true
+        type: string
       - name: "range"
         in: "query"
         description: "The query range, being all or recent"
+        required: false
+        type: "string"
+        x-example: "all"
+      - name: "key"
+        in: "query"
+        description: "The task id"
         required: false
         type: "string"
       responses:
         200:
           description: "successful operation"
           schema:
-            type: "object"
-            additionalProperties:
-              type: "integer"
-              format: "int32"
-      security:
-      - login: []
-securityDefinitions:
-  login:
-    type: "apiKey"
-    in: "header"
-    name: "Bearer"
+            $ref: "#/definitions/AnalysisTasks"
+          examples:
+            application/json:
+              success: true
+              result:
+                - "createTime": "2018-05-29T04:00:04.932Z"
+                  "state": "server_upload_success"
+                  "pkgName": "io.appetizer.example"
+                  "filesize": 47902,
+                  "originalName": "insight-logs-updated.zip"
+                  "exResult":
+                    "test_time": 265019
+                    "issue_count": 2
+                    "coverage": 0.07017543859649122
+                  "reportExport":
+                    "json": "http://cache.appetizer.io/xxx.json"
+                    "html": "http://cache.appetizer.io/xxx.html.zip"
+                    "csv": "http://cache.appetizer.io/xxx.csv.zip"
+                  "downloadURL": "http://cache.appetizer.io/xxx.json.gz"
+                  "id": 91
 definitions:
   UploadToken:
     type: "object"
@@ -250,17 +280,61 @@ definitions:
         type: "string"
       token:
         type: "string"
-  InstrumentationProgress:
+  InstrumentationTasks:
     type: "object"
     properties:
+      success:
+        type: "boolean"
+      result:
+        type: "array"
+        items:
+          $ref: "#/definitions/InstrumentationTask"
+  InstrumentationTask:
+    type: "object"
+    properties:
+      appetizercfg:
+        type: "string"
+      createTime:
+        type: "string"
       state:
+        type: "string"
+      filesize:
+        type: "integer"
+      originalName:
+        type: "string"
+      message:
         type: "string"
       downloadURL:
         type: "string"
-  AnalysisProgress:
+      id:
+        type: "integer"
+  AnalysisTasks:
     type: "object"
     properties:
+      success:
+        type: "boolean"
+      result:
+        type: "array"
+        items:
+          $ref: "#/definitions/AnalysisTask"
+  AnalysisTask:
+    type: "object"
+    properties:
+      createTime:
+        type: "string"
       state:
         type: "string"
+      pkgName:
+        type: "string"
+      filesize:
+        type: "integer"
+      originalName:
+        type: "string"
+      exResult:
+        type: "object"
+      reportExport:
+        type: "object"
       downloadURL:
         type: "string"
+      id:
+        type: "integer"
