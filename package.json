@@ -4,6 +4,11 @@
   "hexo": {
     "version": "3.7.1"
   },
+  "scripts": {
+    "preview": "hexo s",
+    "build": "hexo g",
+    "sync": "qshell qupload2 -bucket docs -check-size -check-exists -overwrite -src-dir ./public"
+  },
   "dependencies": {
     "hexo": "^3.3.8",
     "hexo-cli": "^1.0.3",
