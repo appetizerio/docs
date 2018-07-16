@@ -28,19 +28,14 @@ title: 插桩
 当设备上有多个插桩包同时运行时，每个插桩包都会响应同名的 broadcast 命令，如果需要精确只控制某个APP，可以将 `adb shell am broadcast -a io.appetizer.agent.HelloAppetizer` 改成 `adb shell am broadcast -a io.appetizer.agent.HelloAppetizer <pkg>`，这样 broadcast 只会通知指定的 pkg。注意，当 broadcast 有附加参数时 `<pkg>` 需要在命令最后，例如：`adb shell am broadcast -a io.appetizer.agent.Log --ez myBool true --es haha dada --ei myint 10 com.example.myapp`
 
 ## APP权限要求
-| 网络权限(声明即获取) | 外存读写权限(声明) | 外存权限(获取) | 可否插桩 | log位置 | 浮动框上传分析 | PC端上传分析 |
-| :---: | :---: | :---: | :---: | --- | :---: | :---: |
-| ✓ | ✓ |  ✓ | ✓ | `/sdcard/io.appetizer/<包名>.log` | ✓ | ✓ |
-| X | ✓ |  ✓ | ✓ | `/sdcard/io.appetizer/<包名>.log` | X | ✓ |
-| ✓ | ✓ |  X | ✓ | `/sdcard/io.appetizer/<包名>.log`(待获取外存权限后写出) | ✓ | ✓(待获取外存权限后才有数据) |
-| X | ✓ |  X | ✓ | `/sdcard/io.appetizer/<包名>.log`(待获取外存权限后写出) | X | ✓(待获取外存权限后才有数据) |
-| ✓ | X | X | ✓ | [app私有数据](https://developer.android.com/training/data-storage/files.html#WriteInternalStorage) | ✓ | X |
-| X | X | X | X |  | X | X |
+* 一般情况下，插桩不需要为APP增加权限，以下两种特殊情况下需要权限
+  * 使用 `浮动框上传分析` 时，要求APP有网络访问权限 `android.permission.INTERNET`
+  * 当 APP运行在 `Android <=4.4(Kitkat)` 上时，PC端上传分析要求APP有外存读写权限 `android.permission.WRITE_EXTERNAL_STORAGE`
+* 也就是说如果APP运行在`Android <=4.4(Kitkat)`，如果即没有网络访问也没有外存访问权限，则收集到的数据无法上传分析
 
 ## 常见插桩问题排查
 * 插桩失败 -> 查看列表中插桩任务的状态
   * 等待上传、服务器问题、未知问题 -> 请上报
-  * APP没有外存读写权限 -> 请修改AndroidManifest增加 `WRITE_EXTERNAL_STORAGE` 以及 `READ_EXTERNAL_STORAGE` 权限
   * APP加固 -> 请插桩 debug 或者 release包，不能加固，详见 [混淆与加固](advanced/obfuscation.html)
   * APP已经插桩 -> 请插桩一个未插桩的APK，已插桩即可使用
 * 插桩后启动闪退
@@ -48,3 +43,5 @@ title: 插桩
 ![](resign.png)
 ![](resign2.png)
   * 请查看 [插桩原理](advanced/under-the-hood-instrumentation.html)是否有相关情况，问题未解决 -> 请上报
+* 插桩后的APK收集的数据存储位置
+  * `/sdcard/Android/data/<包名>/files/io.appetizer/<包名>.log`

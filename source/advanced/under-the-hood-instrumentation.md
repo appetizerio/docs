@@ -34,14 +34,11 @@ Appetizer log的信息包括：url，请求参数（http request header），返
 
 ## 权限问题
 * Appetizer不会主动调用需要特殊权限的Android API收集数据；也就是当APP拥有必要的权限通过Android API获取数据时，Appetizer被动收集需要的数据；因此并不需要特殊的权限配置
-* 然而，log需要输出到sdcard保证桌面客户端能够获取，也就是需要 `WRITE_EXTERNAL_STORAGE`，所以
-  * APP需要在AndroidManifest声明需要`WRITE_EXTERNAL_STORAGE`以及`READ_EXTERNAL_STORAGE`权限，否则上传后会拒绝插桩
-  * 在Android 5.0+，在APP启动前，需要获取这些权限（granted）；通过桌面客户端安装授权可以自动授权，手工安装或者直接通过adb请运行 `adb pm permission` 相关命令
-  * 我们正在研究规避这个权限问题的方案
+* 然而，收集的数据存在sdcard上，在 `Android <=4.4(Kitkat)` 上，系统要求APP有 `WRITE_EXTERNAL_STORAGE`
 
 ## log存储位置
-* 正常情况下，插桩包有 `WRITE_EXTERNAL_STORAGE` 权限，运行后会将log记录在 `/sdcard/io.appetizer/<包名>.log`
-* 插桩包启动后不产生该文件，通常为权限问题
+* 正常情况下，运行的数据存储在 `/sdcard/Android/data/<包名>/files/io.appetizer/<包名>.log`
+  * 插桩包启动后不产生该文件，通常为`Android <=4.4(Kitkat)` 上，系统要求APP有 `WRITE_EXTERNAL_STORAGE`
 * 此文件在插桩包的运行过程中会随时会被修改，所以不能同时修改！在彻底关闭APP的安全情况下可以操作，注意，APP需要彻底关闭（不能有后台进程）
 
 ## 65k问题和multidex

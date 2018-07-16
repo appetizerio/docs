@@ -27,7 +27,7 @@ C:\Users\Administrator\AppData\Local\Android\sdk\platform-tools
 ![](get-started-instrumentation.png)
 * 选择APK文件，等待插桩完成，选择 `刷新列表`，列表最上方的插桩任务可以下载插桩后的APK（插桩包）或者上报插桩问题（吐槽）
 ![](get-started-download-instrumented-apk.png)
-* 注意：APK必须有 `WRITE_EXTERNAL_STORAGE` 和 `READ_EXTERNAL_STORAGE` 权限，不可加固，可以混淆；如果不符合，会弹框告知，并且插桩任务的状态会相应显示，例如
+* 注意：APK可以混淆，不可加固；如果不符合，会弹框告知，并且插桩任务的状态会相应显示，例如
 ![](get-started-instrumentation-error.png)
 * 如果是服务器相关问题或者长时间显示为等待上传，请上报
 
