@@ -57,6 +57,10 @@ main:
 - text: 私有化部署
   type: link
   path: advanced/private-deployment.html
+  children:
+    - text: 使用Docker部署私有插桩分析服务
+      type: link
+      path: advanced/private-deployment-details.html
 
 - text: 开放API与持续化集成
   type: label

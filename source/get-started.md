@@ -35,6 +35,7 @@ C:\Users\Administrator\AppData\Local\Android\sdk\platform-tools
 * 通过USB连接测试Android设备，在设备上启动开发者选项->USB调试，在主导航选择 `APP测试`，显示检测到已连接的设备；选择设备，选择已插桩的APK，应该如下图所示
 ![](get-started-testing.png)
 * 点击 `安装APP并授权` 后，点击 `启动APP并开始测试`
+![](get-started-start-testing.png)
 * 在设备上对APP进行操作，然后点击 `上传分析` 等待分析完成
 ![](get-started-finish-testing.png)
 * 完成测试用于放弃这次测试的数据，之后可以重新开始
