@@ -17,7 +17,8 @@ title: 插桩
 ## ADB控制
 插桩后的 APK 会响应特定的 Broadcast 命令，可以由其他 APP 通过 `sendBroadcast(Intent intent)` 的方式，或者 `adb shell am broadcast -a <ACTION>` 的方式控制插桩包的测试过程，方便集成。以下以 `adb am`为例子：
 * `adb shell am broadcast -a io.appetizer.agent.HelloAppetizer`：插桩包会在 Logcat 中输出以 APPETIZER （全大写）为tag的消息 `hello from <pkg>`，其中 `<pkg>` 是插桩包的包名，表示插桩包能够正常响应 broadcast 命令
-* `adb shell am broadcast -a io.appetizer.agent.FloatingMenu`：打开或者关闭浮动框功能，不带参数默认为打开，`--es enabled <true/false>` 指定打开或者关闭
+* `adb shell am broadcast -a io.appetizer.agent.FloatingMenu`：打开或者关闭浮动框功能，不带参数默认为打开，`--ez enabled <true/false>` 指定打开或者关闭
+* `adb shell am broadcast -a io.appetizer.agent.TraceBlocking`：打开或者关闭主线程卡顿检测，不带参数默认为打开，`--ez enabled <true/false>` 指定打开或者关闭
 * `adb shell am broadcast -a io.appetizer.agent.StartTest`：等同于浮动框的开始测试
 * `adb shell am broadcast -a io.appetizer.agent.FinishTest`：等同于浮动框的完成测试
 * `adb shell am broadcast -a io.appetizer.agent.UploadForAnalysis`：等同于浮动框的上传分析

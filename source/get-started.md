@@ -8,7 +8,7 @@ title: 快速入门
 * 安装JDK, Android Studio, Android SDK 可以参考 [教程](https://blog.csdn.net/hebbely/article/details/78970918)
 * 到 Appetizer 主页 https://appetizer.io/cn/  注册 AppetizerIO 账号，并下载最新版本的客户端（解压）；Appetizer支持Windows, Linux, MacOS
 * 运行Appetizer/Appetizer.exe/Appetizer.app，如果有防火墙相关问题，请配置防火墙不阻挡Appetizer
-  * 解压的文件路径中不能有中文字符，比如: `D:\软件\Appetizer-win32-x64` 是无效的， `D:\software\Appetizer-win32-x64\`是可以的
+  * 请完全解压，不要直接在压缩包里双击执行；请注意Appetizer的组件（例如starfish.exe）不要被流氓安全软件删除或者隔离到小黑屋
   * 如果在Linux上提示错误 `error while loading shared libraries: libconf-2.so.4`，需要 `sudo apt-get install libgconf-2-4`
 * 登录后，界面如下：
 ![](first-time.png)
@@ -34,7 +34,7 @@ C:\Users\Administrator\AppData\Local\Android\sdk\platform-tools
 ## 运行测试并提交分析
 * 通过USB连接测试Android设备，在设备上启动开发者选项->USB调试，在主导航选择 `APP测试`，显示检测到已连接的设备；选择设备，选择已插桩的APK，应该如下图所示
 ![](get-started-testing.png)
-* 点击 `安装APP并授权` 后，点击 `启动APP并开始测试`
+* 点击 `安装APP` 后，点击 `启动APP并开始测试`
 ![](get-started-start-testing.png)
 * 在设备上对APP进行操作，然后点击 `上传分析` 等待分析完成
 ![](get-started-finish-testing.png)
