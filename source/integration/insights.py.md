@@ -8,7 +8,7 @@ title: 插桩分析 命令行(Python)
 * 下载插桩后的 apk
 * 安装插桩后的应用，授权，进行测试流程（自动化测试，人工测试都可以），log会存在手机本地
 * 将设备通过USB连接到开发机，并使用本客户端将 log 上传至服务端进行分析
-* 通过[Appetizer Desktop](https://appetizer.io) >= 1.2.0进行可视化查看报告
+* 通过[Appetizer Desktop](https://appetizer.io) >= 1.3.0进行可视化查看报告
 
 插桩和分析包括
 * 应用崩溃（Crash）的原因和崩溃时的状态
@@ -51,20 +51,23 @@ python insights.py login username password
 
 账号可在 [Appetizer.io](https://api.appetizer.io/user/register) 注册。
 
-### 插桩 apk
+### 插桩 apk （需要node）
 ``` Shell
 python insights.py process apk processed_apk
 ```
 
 例如
 ``` Shell
-python insights.py process my.apk my_processed.apk 
+python insights.py process my.apk my_processed.apk # 插桩 my.apk，完成后保存为 my_processed.apk
+python insights.py process my.apk my_processed.apk --enable-inapp-menu # 插桩 my.apk，完成后保存为 my_processed.apk，打开浮动框
+
 ```
 
 插桩需要上传、处理、下载，需要一定时间，依据网络情况与APK大小不同大致在1分钟-3分钟内，期间会有输出表示进展情况。
 
-### 安装插桩后的APK并授权
+### ~安装插桩后的APK并授权（需要node, adb）~
 
+** 新版本插桩包不需要授权，直接adb 安装即可 **
 ``` Shell
 python insights.py install my_processed.apk -s serialno1 -s serialno2
 ```
@@ -74,15 +77,15 @@ python insights.py install my_processed.apk -s serialno1 -s serialno2
 
 
 ### 测试
-Appetizer 质量监控客户端对测试没有特别限制，可以是简单的人工测试，也可以是复杂的回归测试，测试长度不限。插桩后的APK会自动log
+Appetizer 质量监控客户端对测试没有特别限制，可以是简单的人工测试，也可以是复杂的回归测试，测试长度不限。APP只要开始运行，插桩代码即开始收集数据
 
-### 上传log获取分析报告
+### 上传log获取分析报告（需要node, adb）
 ``` Shell
 python insights.py analyze my_processed.apk -s serialno1 -s serialno2 --clear
 ```
 * `-s`是可选参数， `serialno1` `serialno2` 之类的是设备的串号，通过 `adb devices` 获得，需要分析多个设备上的log可以用多个`-s`命令指定设备; 不提供任何`-s`命令时，默认认为只有一个设备并对该设备进行分析
 * `--clear`是可选参数，用于从设备下载log后将设备上log清空
-* 分析成功后可以通过[Appetizer Desktop](https://appetizer.io) >= 1.2.0 查看
+* 分析成功后可以通过[Appetizer Desktop](https://appetizer.io) >= 1.3.0 查看
 * 分析成功后，如果服务器可以导出报告，相应的导出报告下载路径会显示，例如：
 ``` Shell
 waiting...... server is uploading the report
@@ -95,8 +98,8 @@ exported reports available at:
 }
 ```
 
-### 其他功能
+### 强制清除log（需要node, adb）
 ``` Shell
-python insights.py clearlog my_processed.apk -s serialno1 -s serialno2 --clear
+python insights.py clearlog my_processed.apk -s serialno1 -s serialno2
 ```
 将设备上有指定插桩后的APK的log清除
