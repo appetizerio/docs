@@ -48,8 +48,8 @@ C:\Users\Administrator\AppData\Local\Android\sdk\platform-tools
 ![](get-started-sample-report.png)
 
 ## 继续阅读
-* [选择合理的测试方法 提高测试覆盖面 让Appetizer找到更多问题](testing.html)
-* [理解Appetizer报告找到的问题 导出报告进一步分析](analysis.html)
-* [接入更多的第三方服务 从报告开始构建完整质量保障体系](3rdparty.html)
+* [选择合理的测试方法 提高测试覆盖面 让Appetizer找到更多问题](usage/testing.html)
+* [理解Appetizer报告找到的问题 导出报告进一步分析](usage/analysis.html)
+* [接入更多的第三方服务 从报告开始构建完整质量保障体系](usage/3rdparty.html)
 * [去社区逛逛 看看大家的踩坑记和经验](https://testerhome.com/topics/node127)
 * [加入QQ群 467889502 和Appetizer团队以及大家互动](http://shang.qq.com/wpa/qunwpa?idkey=4f1ef873aac8ca2a545fae99067ef5f4e505ac4a6ee3d1fad937a5dfe43ae274)
