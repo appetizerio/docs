@@ -3,10 +3,10 @@ title: 使用Appetizer监控线上错误
 # 使用Appetizer监控线上错误
 在发行包中接入Appetizer服务，自动收集闪退、卡顿、HTTP错误等线上问题，可用于了解线上APP运行稳定情况或者监控灰度发版的质量。
 
-**目前监控功能在内测中，暂时只支持以SDK方式接入Appetizer并开启监控，功能仅限监控Okhttp2/3的错误HTTP请求，未来将逐步将现有Appetizer数据收集功能剪裁后加入线上监控。以下为试用步骤（试用期间服务会快速迭代，请保持与Appetizer团队的联系）：**
+**目前监控功能在内测中，暂时只支持以SDK方式接入Appetizer并开启监控，功能仅限监控Okhttp2/3的错误HTTP请求，未来将逐步将现有Appetizer数据收集功能剪裁后加入线上监控。请通过QQ与Appetizer团队联系获取betaid, 以下为试用步骤（试用期间服务会快速迭代，请保持与Appetizer团队的联系）：**
 
 ## 接入步骤
-* 下载最新版本的SDK jar文件，SDK更新快，以更新日期为版本标识，例如 `appetizer-20181008-SNAPSHOT.jar`，将jar文件放入 `app/libs/` 文件夹下，如下图：
+* 下载最新版本的SDK jar文件，SDK更新快，以更新日期为版本标识，例如 [`appetizer-20181012-SNAPSHOT.jar`](http://dl.appetizer.io/appetizer-20181012-SNAPSHOT.jar)，将jar文件放入 `app/libs/` 文件夹下，如下图：
 ![](live-add-libs.png)
 * 在 `Application` 类的 `onCreate()` 中进行初始化
 ```Java
