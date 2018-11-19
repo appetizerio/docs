@@ -5,8 +5,8 @@
     "version": "3.7.1"
   },
   "scripts": {
-    "preview": "rm -r public && hexo s",
-    "build": "rm -r public && hexo g",
+    "preview": "rm -rf public && hexo s",
+    "build": "rm -rf public && hexo g",
     "sync": "qshell qupload2 -bucket docs -check-size -check-exists -overwrite -src-dir ./public"
   },
   "dependencies": {
