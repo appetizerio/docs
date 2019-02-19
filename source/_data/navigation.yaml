@@ -9,24 +9,39 @@ main:
 
 - text: 功能与使用
   type: label
-- text: 插桩
+- text: 测试包与插桩
   type: link
   path: usage/instrumentation.html
 - text: 测试
   type: link
   path: usage/testing.html
-- text: 分析
+- text: 测试数据分析
   type: link
   path: usage/analysis.html
-- text: 接入第三方服务
+- text: 线上错误监控
+  type: link
+  path: advanced/live.html
+- text: 工具平台
   type: link
   path: usage/3rdparty.html
+- text: 插桩原理
+  type: link
+  path: advanced/under-the-hood-instrumentation.html
+- text: 私有化部署
+  type: link
+  path: advanced/private-deployment.html
 - text: 历史版本
   type: link
   path: changelog.html
 
 - text: 教程
   type: label
+- text: 精细优化APP启动
+  type: link
+  path: https://zhuanlan.zhihu.com/p/46920427
+- text: 网络流量优化
+  type: link
+  path: https://zhuanlan.zhihu.com/p/32587148
 - text: 精细化 HTTP 分析 (一)：别再只是代理抓个包了
   type: link
   path: http://zhuanlan.zhihu.com/p/27734223
@@ -36,63 +51,9 @@ main:
 - text: Kotlin时代测试工具的选择
   type: link
   path: http://zhuanlan.zhihu.com/p/27149213
-
-- text: 高级话题
-  type: label
-- text: 插桩原理
+- text: 基于Docker的工具/服务即插即用
   type: link
-  path: advanced/under-the-hood-instrumentation.html
-- text: 分析原理
-  type: link
-  path: advanced/under-the-hood-analysis.html
-- text: 混淆加固
-  type: link
-  path: advanced/obfuscation.html
-- text: 接口测试
-  type: link
-  path: advanced/api-testing.html
-- text: 网络流量优化
-  type: link
-  path: advanced/traffic.html
-- text: 私有化部署
-  type: link
-  path: advanced/private-deployment.html
-  children:
-    - text: 使用Docker部署私有插桩分析服务
-      type: link
-      path: advanced/private-deployment-details.html
-
-- text: 开放API与持续化集成
-  type: label
-- text: 环境配置
-  type: link
-  path: https://testerhome.com/topics/10290
-- text: 录制重放
-  type: link
-  path: integration/replaykit-intro.html
-  children:
-    - text: 命令行工具
-      type: link
-      path: integration/replaykit.html
-    - text: Python 封装
-      type: link
-      path: integration/replaykit.py.html
-    - text: Java 封装
-      type: link
-      path: integration/replaykit.java.html
-- text: 插桩分析
-  type: link
-  path: integration/insights.html
-  children:
-    - text: 命令行工具(Python)
-      type: link
-      path: integration/insights.py.html
-    - text: Jenkins接入
-      type: link
-      path: integration/insights.jenkins.html
-- text: REST API
-  type: link
-  path: integration/rest.html
+  path: https://zhuanlan.zhihu.com/p/43894620
 
 - text: 社区
   type: label

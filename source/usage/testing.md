@@ -2,10 +2,14 @@ title: 测试
 ---
 
 # 测试
+Appetizer支持多种测试方法：设备端手工测试，PC端手工测试，脚本测试，自动化工具测试
 
-> 测试方法千千万，不要迷信任何一种；当工作只需要一次点击一个工具时，请准备下岗
+## 设备端手工测试
+* 在设备端安装并启动插桩后的APP自动有Appetizer浮动功能菜单，开始测试 放弃测试 上传分析
+![](floating-menu.png)
+* 设备端手工测试适合少量数据采集的情况，如果上传失败，请尝试使用 PC端手工测试 或者 命令行上传分析：https://github.com/appetizerio/insights.py
 
-## 手工测试 PC端控制
+## PC端手工测试
 * 通过USB连接测试Android设备，在设备上启动开发者选项->USB调试，在主导航选择 `APP测试`，显示检测到已连接的设备；选择设备，选择已插桩的APK作为待测APP，如下图所示
 ![](../get-started-testing.png)
 * 点击 `安装APP` 后，点击 `启动APP并开始测试`
@@ -18,43 +22,37 @@ title: 测试
 * 缺点：效率低下，不能批量多设备运行
 * 建议：可配合录制重放减轻部分工作
 
-## 手工测试 手机端控制
-* 启动插桩后的APP自动有Appetizer浮动功能菜单，开始测试 放弃测试 上传分析
-![](floating-menu.png)
+## 脚本测试
+* 在主导航选择 `测试脚本`，使用Python向一个设备安装uiautomator2组件：https://github.com/openatx/uiautomator2/#installation
+* 在Appetizer中点击 写脚本 ，进入所见即所得脚本编辑模式
+![](inspector1.png)
+* 脚本编辑器左边为会实时设备投屏，右边上方为可以插入的代码，下方为正在编辑的脚本；脚本语言为Python，支持 [uiautomator2](https://github.com/openatx/uiautomator2) 框架以及 Appium框架，请观看以下视频教学一个完整的脚本编写的过程
+：
+<video src="/videos/20190215inspector.mp4" loop controls muted width="50%" class="center-block"/>
 
-## UI自动化脚本测试
-* 社区有很多教学，搜索引擎和社区是学习的好地方；搜索关键字：Appium, uiautomator, Calabash, xpath
-  * [python appium UI 自动化测试框架讨论](https://testerhome.com/topics/11866)
-  * [浅谈自动化测试工具 python-uiautomator2](https://testerhome.com/topics/11357)
-  * [UI 自动化框架调研总结](https://testerhome.com/topics/6602)
-  * [网易 UI 自动化工具 Airtest 浅用记录](https://testerhome.com/topics/12391)
-* 优点：高效，能够自动完成重复劳动，相对可以跨多个设备运行同一套任务；适合比较固定的业务
-* 缺点：并不是所有操作都可以自动化，例如有安全保护防止自动化的界面，有特殊舒适，另外业务变化快的情况下自动化脚本维护成本会剧烈上升
-* 建议：配合手工测试
-* Appetizer提供了Python命令行工具，用于配合自动化脚本运行插桩包进行分析出报告
-  * [插桩分析 命令行(Python) ](../integration/insights.py.html)
-  * [Appetizer 整合梳理](https://testerhome.com/topics/10290)
-
-## UI压力测试Maxim
-[Maxim](https://github.com/zhangzhao4444/Maxim) 是一个基于uiautomator的快速UI界面压力测试工具，可以全自动解析界面控件树，并按照一定遍历规则进行点击、滑动、输入等操作；可通过Appetizer 主导航->APP测试->UI压力测试来使用；
-![](https://testerhome.com/uploads/photo/2018/8028ddbc-38c2-427b-8864-336e9316ed52.gif!large)
-* 优点：稳定可靠(Android 5-7)，速度快，全自动，可配置
-* 缺点：对复杂业务（需要特殊输入的不合适），APP需要配置跳过难以自动化的部分，例如登录、表单等
-
-Appetizer简化了配置 Maxim 命令行的工作； Appetizer 提供了以下便利：
-* 自动产生命令行固定部分，不再需要检查打字打错
-* 图形化支持所有 Maxim 参数，选择特定模式显示配置仅该模式支持的子参数；保证参数配置正确，方便好用
-* 在图形化界面中直接编辑各种配置文件，不再需要手工push到设备配置名字，开始测试时 Appetizer 自动产生配置文件并push（见下图）
-* 非常方便的黑白名单界面，轻松点击指定黑白Activity不再需要记忆长长的Activity全名
-* 快捷批量操作，批量下载截图，批量删除；问题一键上报作者
+## 自动化测试：UI压力测试Maxim
+[Maxim](https://github.com/zhangzhao4444/Maxim) 是一个UI自动化测试工具，可以全自动解析界面控件树，并按照一定遍历规则进行点击、滑动、输入等操作；可通过Appetizer 主导航->自动化测试 来使用；
+* 首次使用，首先下载最新版本的framework.jar和monkey.jar并上传到设备的`/sdcard`目录：https://github.com/zhangzhao4444/Maxim#%E7%8E%AF%E5%A2%83%E9%A2%84%E5%A4%87
+* 在Appetizer界面中选择设备、待测APK文件（确保测试开始前APP已经安装到设备），其他选项为可选参数
 ![](maxim-overview.png)
+* 点击下方开始测试，设备端就是自动化开始操作见面了
+![](maxim-running.png)
+* 优点：稳定可靠(Android 5-9)，速度快，全自动，可配置
+* 缺点：对复杂业务（需要特殊输入的不合适），APP需要配置跳过难以自动化的部分，例如登录、表单等
+* 为了更有效地使用Maxim，需要对APP进行一系列的配置
+  * Activity级别黑白名单，可以配置Maxim只遍历部分的Activity，或者禁止进入某些Activity（实际运行中一旦进入会自动按返回键退出）；配置方法为首先选择待测APK，在出现的黑白名单里面设置允许禁止遍历一些Acitivty；点击Activity表头可以对Activity进行排序，Activity表头下面的输入框可以筛选Activity；常见需要禁止遍历的Activity包括各类第三方登录的Activity、第三方分享的Activity以及一些人工客服页面、帮助页面等等；注意，黑白名单只对Activity有效，如果APP使用了Fragment这类子页面设计并不能遍历对其的控制
+![](maxim-whitelist.png)
+  * 精细化配置：Maxim还提供了一些精细化的控制，比如max.xpath.actions，可以对于某些界面进行确定性的步骤（好比脚本），常用的可以自动登录；max.widget.black可以屏蔽某些界面上的某些控件/区域，常用于屏蔽一些不想进入的子界面以及广告区域等；max.config可以配置是否需要在测试过程中自动截图，并且设置启动等待时间等；详细的参数意义以及格式见：https://testerhome.com/topics/11719
+![](maxim-config.png)
+  * 其他配置包括：事件间延迟（控制Maxim两次产生的自动化操作间的时间，一般建议在1500ms左右，太快没有意义）；日志级别（控制Maxim输出的log，可以看到每次操作位置、黑白名单作用，拉活，APP crash等信息）；输出路径（Appetizer提供的收集额外的测试数据存储的电脑端位置）；数据收集（Appetizer提供的额外的数据手机功能）
+![](maxim-config2.png)
+  * 此外，在选择设备的地方，有方便管理Maxim设备端采集的数据（截图，XML等）的功能，可以在一次测试结束后一键下载到PC端
+![](maxim-download-results.png)
+  * Maxim文档：https://testerhome.com/topics/11719
+  * Maxim QQ群：608824162
 
-|  一应俱全的Maxim配置  | 黑白名单 | 问题上报作者，下载结果 | 
-|:-----------------:| :---------------: | :--: |
-|  ![](maxim-config.png) |![](maxim-whitelist.png)| ![](maxim-download-results.png)|
-
-## UI遍历测试 AppCrawler
-[AppCrawler](https://testerhome.com/topics/8343)是一个基于Appium的自动化遍历工具，可以全自动解析界面控件树，通过配置进行遍历以及比较复杂的交互方案，适用Android/iOS；可通过Appetizer 主导航->APP测试->UI自动遍历来使用
+## 自动化测试：UI遍历测试 AppCrawler
+[AppCrawler](https://testerhome.com/topics/8343)是一个基于Appium的自动化遍历工具，可以全自动解析界面控件树，通过配置进行遍历以及比较复杂的交互方案，适用Android/iOS；可通过Appetizer 主导航->自动化测试->UI自动遍历来使用
 ![](https://testerhome.com/uploads/photo/2017/25cdb6a8-d6cb-4891-b0ff-5ccd7c3005c8.png!large)
 * 优点：可用于Android/iOS，设计合理的遍历规则的情况下可以达到比较好的自动化效果
 * 缺点：继承了Appium的所有Bug，偶尔不稳定，交互速度慢等；

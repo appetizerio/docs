@@ -6,13 +6,59 @@ title: 插桩
 ## 什么是插桩
 插桩技术可以自动修改APK中的DEX代码，对已有代码打点监控或者增加新的代码；插桩不需要源代码，可以处理混淆后的APK，可以广泛收集异常、ANR、网络请求、主线程卡顿、界面切换等信息，用于调试与测试。
 
+## 插桩
+* 图形化界面
+![](../get-started-instrumentation.png)
+* Python客户端：https://github.com/appetizerio/insights.py
+```
+python -m pip install -r requirements.txt
+python insights.py login <username> <password>
+python insights.py process <apk> <processed_apk>
+```
+* Jenkins：使用Python客户端进行插桩
+  * 在Jenkins服务器上安装Python客户端并登录：https://github.com/appetizerio/insights.py
+  * 在Jenkins `gradle`编译步骤增加如下命令，Windows的用　`Execute Windows batch command`，　Linux和MacOS上用 `Execute Shell`
+  * 注意，insights.py请自行替换成之前配置的insights.py工程路径（比如 `/Users/haha/insights.py/insights.py`，注意一个是目录名，里面的才是实际Python脚本文件）
+  * 命令的参数中apk是gradle编译的apk文件的路径，和具体Jenkins配置的working directory有关，一般是`build/outputs/apk/app-release.apk`
+  * 命令的参数中processed_apk是存放插桩后的apk文件的路径，同样，一般是 `build/outputs/apk/app-release-appetizer.apk`
+![](insights-jenkins2.png)
+![](insights-jenkins3.png)
+  * 全部配置完成后尝试构建，输出大致应该是这样的
+![](insights-jenkins4.png)
+
+## 插桩包状态栏提示
+* 插桩包运行过程中会有状态栏通知提醒，显示当前已经手机的数据量
+![](notification.png)
+
 ## 配置插桩包功能
-* 插桩后的APP有诸多可配置的功能，在插桩列表中点击如下俺就进行配置、重签名等，然后保存
+* 插桩后的APP有诸多可配置的功能，在插桩列表中点击如下进行配置、重签名等，然后保存
 ![](config-instrumentation.png)
 * 例如：插桩提供 浮动框 功能，启用后插桩包在启动后有Appetizer浮动功能菜单，在下面开启 “APP内上传分析浮动功能菜单”，点击配置并下载后保存配置好的APK
 ![](enable-floating-menu.png)
 * 正常安装，启动后如图，即可以在设备上完成上传分析
-![](floating-menu.png)
+
+## 混淆加固与okhttp
+插桩需要在dex里搜索相关的函数和函数引用。加固后dex内容不存在，而且加固防止二次代码修改，所以**加固包不可以插桩**；Appetizer设计为可以插桩混淆包，绝大多数功能，包括错误收集、性能数据收集，以及网络请求捕获都可以对混淆有效，唯一的例外是okhttp，请参考以下方案：
+
+绝大多数的http库都不受到混淆的影响，唯一有问题的是okhttp，我们观测到强力的混淆会去除okhttp一些功能，导致Appetizer无法正常截获请求，**解决方案是到`proguard-rules.pro`里面，添加一下规则防止混淆okhttp**，首先找到这个规则文件：
+
+![](obfuscation.png)
+
+然后添加
+```
+-keep class okhttp3.** { *; }
+-keep interface okhttp3.** { *; }
+-dontwarn okhttp3.**
+-keep class com.squareup.okhttp.** { *; }
+-keep interface com.squareup.okhttp.** { *; }
+-dontwarn com.squareup.okhttp.**
+
+-keep class okio.* { *; }
+-keep interface okio.* { *; }
+-dontwarn okio.**
+```
+这些字段保证混淆器不会删除okhttp的功能，Appetizer就能正常捕获okhttp的请求了。
+
 
 ## ADB控制
 插桩后的 APK 会响应特定的 Broadcast 命令，可以由其他 APP 通过 `sendBroadcast(Intent intent)` 的方式，或者 `adb shell am broadcast -a <ACTION>` 的方式控制插桩包的测试过程，方便集成。以下以 `adb am`为例子：
@@ -39,12 +85,14 @@ title: 插桩
 ## 常见插桩问题排查
 * 插桩失败 -> 查看列表中插桩任务的状态
   * 等待上传、服务器问题、未知问题 -> 请上报
-  * APP加固 -> 请插桩 debug 或者 release包，不能加固，详见 [混淆与加固](../advanced/obfuscation.html)
+  * APP加固 -> 请插桩 debug 或者 release包，不能加固，详见 [混淆与加固](#混淆加固与okhttp)
   * APP已经插桩 -> 请插桩一个未插桩的APK，已插桩即可使用
 * 插桩后启动闪退
   * 确认是否有签名检查机制，使用主导航 APK文件工具，打开插桩包，对插桩包进行重新签名，使用调试Key重新签名，如下图，重新签名后再试
 ![](resign.png)
 ![](resign2.png)
   * 请查看 [插桩原理](../advanced/under-the-hood-instrumentation.html)是否有相关情况，问题未解决 -> 请上报
+* 插桩后无法抓取HTTP请求
+  * 详见 [混淆与加固](#混淆加固与okhttp)
 * 插桩后的APK收集的数据存储位置
   * `/sdcard/Android/data/<包名>/files/io.appetizer/<包名>.log`
